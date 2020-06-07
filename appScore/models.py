@@ -8,7 +8,7 @@ class Profile(models.Model):
     contact = models.CharField(max_length=80 ,null=True)
 
     def __str__(self):
-        return f'{self.user.username}
+        return f'{self.user.username}'
 
     def save_profile(self):
         self.save()

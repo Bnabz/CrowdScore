@@ -8,7 +8,6 @@ from django.urls import reverse
 
 
 def index(request):
-   
-   
-    return render(request, 'index.html', {})
+    projects = Project.objects.all()
+    return render(request, 'index.html', {"projects":projects})
 
