@@ -66,4 +66,16 @@ def submit_project(request):
     return render(request, 'submit_project.html',{"form":form,"current_profile":current_profile })
 
 
+def search_results(request):
+
+    if 'searchterm' in request.GET and request.GET['searchterm']:
+        search_term = request.GET.get("searchterm")
+        searched_name = Project.search_project(search_term)
+        
+        return render(request,'search.html', { "projects":searched_name,})
+
+    else:
+        message = "You haven't searched for any project"
+        return render(request,'search.html',{"message":message})
+
 

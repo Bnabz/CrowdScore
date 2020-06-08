@@ -15,6 +15,16 @@ class Profile(models.Model):
     def delete_profile(self):
         self.delete()
 
+    
+    @receiver(post_save, sender = User)
+    def create_profile(sender, instance,created, **kwargs):
+        if created:
+            Profile.objects.create(user = instance)
+
+    @receiver(post_save,sender = User)
+    def save_profile( sender, instance, **kwargs):
+        instance.profile.save()    
+
 class Project(models.Model):
     title = models.CharField(max_length=50)
     description = models.CharField(max_length=200)
@@ -32,5 +42,10 @@ class Project(models.Model):
 
     def delete_post(self):
         self.delete()
+
+    @classmethod
+    def search_project(cls, name):
+        return cls.objects.filter(title__icontains=name).all()
+
 
 
