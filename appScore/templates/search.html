@@ -1,0 +1,45 @@
+{%extends 'base.html'%}
+{% load bootstrap3 %}
+
+{% block content %}
+{{block.super}}
+
+<div class="container">
+   
+
+    {% if projects %}
+    <div class="text-center">
+      <div class="panel" style="width: 45rem;">
+            <div class="panel-body">
+              {% for project in projects%}
+                        <div class="card">
+                          {% if project.profile_pic%}
+                            <div class="view overlay">
+                            <img class="card-img-top" src="{{project.profile_pic.url}}"  alt="Card image">
+                            </div>
+                            {% endif %}
+                            <div class="card-body">
+                              <h4 class="card-title">Submited by {{project.user.username}}</h4>
+                              <hr>
+                            </div>
+                            <!-- <div class="card-body">
+                                <span>{{profile.followers|length}}followers</span> </br>
+                                <span>{{profile.following|length}}following</span> 
+                            </div> -->
+                            
+                            
+                        </div>
+                {% endfor %} 
+                <a href="{%url 'index'%}" class="btn btn-primary">Home</a>
+        </div>
+      </div>
+    </div>
+
+    {% else %}
+
+    <div class="row text-center">     
+          <h2> {{message}}</h2>
+    </div>
+    {% endif %}
+
+{% endblock %}
