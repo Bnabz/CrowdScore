@@ -61,7 +61,7 @@ def submit_project(request):
         return redirect('index')
 
     else:
-        form = PostForm()
+        form = ProjectForm()
 
     return render(request, 'submit_project.html',{"form":form,"current_profile":current_profile })
 
