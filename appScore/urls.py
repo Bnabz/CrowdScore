@@ -10,3 +10,5 @@ urlpatterns = [
     path('submit_project/', views.submit_project, name='submit_project'),
     path('search/',views.search_results, name='search'),
 ]
+if settings.DEBUG:
+    urlpatterns+= static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
