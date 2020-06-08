@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse, Http404,HttpResponseRedirect
 from .models import Profile, Project
 from django.contrib.auth.decorators import login_required
-from .forms import ProfileForm
+from .forms import ProfileForm, ProjectForm
 from django.contrib.auth.models import User
 from django.urls import reverse
 
@@ -40,3 +40,30 @@ def edit_profile(request):
             form=ProfileForm()
 
     return render(request,'edit_profile.html', {"form":form})
+
+
+
+
+@login_required(login_url='/accounts/login/')
+def submit_project(request):
+    current_user = request.user
+    current_profile = Profile.objects.filter(user=current_user)
+
+
+    if request.method == 'POST':
+        form = ProjectForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.profile = current_user
+            post.likes = 0
+            post.save()
+
+        return redirect('index')
+
+    else:
+        form = PostForm()
+
+    return render(request, 'submit_project.html',{"form":form,"current_profile":current_profile })
+
+
+
