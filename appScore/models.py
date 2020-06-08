@@ -32,7 +32,7 @@ class Project(models.Model):
     description = models.CharField(max_length=200)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     date_posted = models.DateTimeField(auto_now_add=True, blank=True)
-    screenshot = models.ImageField()
+    screenshot = models.ImageField(upload_to='images/')
     link = models.URLField(max_length=250)
 
     def __str__(self):
