@@ -6,4 +6,5 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('', views.index, name='index'),
     path('my_profile/',views.my_profile, name='my_profile'),
+    path('edit_profile/', views.edit_profile, name='edit_profile'),
 ]
