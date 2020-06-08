@@ -23,4 +23,4 @@ def my_profile(request):
     project_number = len(projects)
     
 
-    return render(request, 'my_profile.html',{"profile":profile,"projects":projects,"current_user":current_user,"username":username,"project_number":project_number})
+    return render(request, 'my_profile.html',{"profile":profile,"projects":projects,"username":username,"project_number":project_number})
