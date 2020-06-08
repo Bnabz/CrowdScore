@@ -35,17 +35,17 @@
                 <a href="">Submmit your project</a>
               </li>
               <li>
-                <a href="">View profile</a>
+                <a href="{%url 'my_profile'%}">View profile</a>
               </li>
               <li>
-                <a href="">Logout</a>
+                <a href="/accounts/logout">Logout</a>
               </li>
             </ul>
           </li>
         </ul>
         {% else %}
         <li>
-          <a class='btn btn-default' href=">Login</a>
+          <a class='btn btn-default' href="/accounts/login">Login</a>
         </li>
         {% endif %}
       </div>

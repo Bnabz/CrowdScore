@@ -17,10 +17,10 @@ class Profile(models.Model):
 
 class Project(models.Model):
     title = models.CharField(max_length=50)
-    image = models.ImageField()
     description = models.CharField(max_length=200)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     date_posted = models.DateTimeField(auto_now_add=True, blank=True)
+    screenshot = models.ImageField()
     link = models.URLField(max_length=250)
 
     def __str__(self):
