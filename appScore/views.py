@@ -23,6 +23,19 @@ def my_profile(request):
 
     return render(request, 'my_profile.html',{"profile":profile,"projects":projects,"username":username,"project_number":project_number})
 
+@login_required(login_url='/accounts/login/')
+def profile(request,id):
+
+    user = User.objects.get(id=id)
+    profile = Profile.objects.get(user__id=id)
+    projects = Project.objects.filter(user__id=id)
+    username = profile.user.username
+    project_number = len(projects)
+    
+  
+
+    return render(request, 'profile.html',{"profile":profile,"projects":projects,"user":user,"username":username,"project_number":project_number})
+
 @login_required(login_url='/accounts/login')
 def edit_profile(request):
 
@@ -54,7 +67,6 @@ def submit_project(request):
         if form.is_valid():
             post = form.save(commit=False)
             post.user = current_user
-            post.likes = 0
             post.save()
 
         return redirect('index')
@@ -81,12 +93,16 @@ def search_results(request):
 @login_required(login_url='/accounts/login/')
 def display_project(request, id):
     project = Project.objects.get(id = id)
-    project_ratings = Rating.objects.filter(project__id=id)
+    project_ratings = Rating.objects.filter(project__id=id) 
     design_ratings=[]
     usability_ratings=[]
     content_ratings=[]
-
-
+    if project_ratings:
+        index=len(project_ratings)-1
+        project_rating = project_ratings[index]
+    else:
+        project_rating = None
+       
     if request.method == 'POST':
         form = RatingsForm(request.POST)
         if form.is_valid():
@@ -96,22 +112,24 @@ def display_project(request, id):
             avg = (new_rating.design+new_rating.content+new_rating.usability)/3
             new_rating.average = round(avg, 2)
             new_rating.save()
-            project_ratings = Rate.objects.filter(post=post)
+            project_ratings = Rating.objects.filter(project__id=id)
             for i in project_ratings:
                 design_ratings.append(i.design)
                 usability_ratings.append(i.usability)
                 content_ratings.append(i.content)
 
-            design_average = round((sum(design_ratings) / len(design_ratings)),2)      
-            usability_average = round((sum(usability_ratings) / len(usability_ratings)),2)
-            content_average = round((sum(content_ratings) / len(content_ratings)),2)
+            new_rating.design_average = round((sum(design_ratings) / len(design_ratings)),2)      
+            new_rating.usability_average = round((sum(usability_ratings) / len(usability_ratings)),2)
+            new_rating.content_average = round((sum(content_ratings) / len(content_ratings)),2)
 
-            average = (design_average + usability_average + content_average) / 3
-            general_average = round(average, 2)
+            average = (new_rating.design_average + new_rating.usability_average + new_rating.content_average) / 3
+            new_rating.average = round(average, 2)
+            new_rating.save()
+            return redirect("display_project", project.id)
            
     else:
         form = RatingsForm()
 
-    return render(request, "display_project.html", {"project":project,"project_ratings":project_ratings,"design_average":design_average, "usability_average":usability_average, "content_average": content_average,"general_average":general_average,"form":form,})
+    return render(request, "display_project.html", {"project":project,"project_rating":project_rating,"form":form})
 
 

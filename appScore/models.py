@@ -52,10 +52,13 @@ class Project(models.Model):
 class Rating(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    design = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)],default=0, blank=True)
-    usability = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)], default=0, blank=True)
-    content = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)],default=0, blank=True)
+    design = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)],default=5, blank=True)
+    usability = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)], default=5, blank=True)
+    content = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)],default=5, blank=True)
     average = models.DecimalField(decimal_places=2,max_digits=3,default=0, blank=True)
+    design_average = models.FloatField(default=0, blank=True)
+    usability_average = models.FloatField(default=0, blank=True)
+    content_average = models.FloatField(default=0, blank=True)
 
     def save_rate(self):
         self.save()

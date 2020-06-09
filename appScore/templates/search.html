@@ -8,27 +8,30 @@
    
 
     {% if projects %}
-    <div class="text-center">
-      <div class="panel" style="width: 45rem;">
-            <div class="panel-body">
-              {% for project in projects%}
-                        <div class="card">
-                          {% if project.profile_pic%}
-                            <div class="view overlay">
-                            <img class="card-img-top" src="{{project.profile_pic.url}}"  alt="Card image">
-                            </div>
-                            {% endif %}
-                            <div class="card-body">
-                              <h4 class="card-title">Submited by {{project.user.username}}</h4>
-                              <hr>
-                            </div>
-                        </div>
-                {% endfor %} 
-                <a href="{%url 'index'%}" class="btn btn-primary">Home</a>
-        </div>
+      <div class="row">
+        {% for project in projects%}
+          <div class="col-md-8">
+              <div class="card">
+                  <img src="{{project.screenshot.url}}" alt="" class="img-fluid">
+              </div>
+  
+          </div>
+          <div class="col-md-4">
+              <div style="display: flex;">
+                  <img src="{{project.user.profile.profile_pic.url}}" alt="profile pic" style="border-radius: 300%;" width="32"
+                      height="32" class="img-fluid">
+                  <a href="{%url 'profile' project.user.id%}" style="color: rgb(27, 91, 230);">
+                      <h5 class="card-title" style="padding-top: 10px; margin-left:10px">Posted by {{project.user.username}}
+                      </h5>
+                  </a> 
+                  
+              </div>
+              <hr>
+              <h5> {{project.description}}</h5>
+              <a href="{%url 'display_project' project.id%}"class="btn blue-gradient">Rate Site</a>       
+          </div>
+          {% endfor %} 
       </div>
-    </div>
-
     {% else %}
 
     <div class="row text-center">     
