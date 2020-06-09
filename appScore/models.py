@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.core.validators import MinValueValidator,MaxValueValidator
+from statistics import mean
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -48,6 +50,21 @@ class Project(models.Model):
     @classmethod
     def search_project(cls, name):
         return cls.objects.filter(title__icontains=name).all()
+
+
+class Rating(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    design = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)])
+    usability = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)], null=True)
+    content = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)])
+    average = models.DecimalField(decimal_places=2)
+
+    def save_rate(self):
+        self.save()
+
+    def delete_rate(self):
+        self.delete()
 
 
 
