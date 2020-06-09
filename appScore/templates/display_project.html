@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <img src="{{project.screenshot.url}}" alt="" class="img-fluid">
+            </div>
+
+        </div>
+        <div class="col-md-4">
+            <div style="display: flex;">
+                <img src="{{project.user.profile_pic.url}}" alt="profile pic" style="border-radius: 300%;" width="32"
+                    height="32" class="img-fluid">
+                <a href="{%url 'profile' post.profile.id%}" style="color: #333;">
+                    <h5 class="card-title" style="padding-top: 10px; margin-left:10px">{{post.profile.username}}
+                    </h5>
+                </a>
+            </div>
+            <hr>
+            {%for rating in project_ratings%}
+            <p><span style="font-weight: bolder;">{{rating.user.username}}:</span> {{rating.average}}</p>
+            {%endfor%}
+            <p>
+                Average rating: <br/>
+               Design:{{design_average}} Usability:{{usability_average}} Content:{{content_average}}<br/>
+               Total:{{general_average}}
+            </p>
+            <form class="" action="{%url 'display_project' post.id%}" style="display:flex" method="POST">
+                {%csrf_token%}
+                {{form}}
+                <button style="border:none; border-radius:0; font-weight:bold; padding:10px;">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

@@ -15,19 +15,15 @@
 
     <div class="card-body">
   
-      <h4 class="card-title">Username : <strong>{{username}}</strong></h4>
-      <p class="card-text"> {{profile.bio | safe }} </p>
+      <h4 class="card-title"><strong>Name : {{username}}</strong></h4>
+      <p class="card-text"style="font-size:120%"> <strong>{{profile.bio | safe }} </strong></p>
       <hr>
-      <ul>
-        <li><span>{{project_number}}</span> projects</li>
-      </ul>
-  
+        <p></strong>{{project_number}} projects</strong></p>
     </div>
   
   </div>
    <a href="{%url 'edit_profile' %}" class="btn blue-gradient">Edit Profile</a>
-    <hr>
-
+    
 </div>
 
 

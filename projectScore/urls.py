@@ -20,6 +20,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django_registration.backends.one_step.views import RegistrationView
 from django.urls import reverse_lazy
 
+
 urlpatterns = [
     path('', include('appScore.urls')),
     path('admin/', admin.site.urls),

@@ -1,11 +1,10 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse, Http404,HttpResponseRedirect
-from .models import Profile, Project
+from .models import Profile, Project, Rating
 from django.contrib.auth.decorators import login_required
-from .forms import ProfileForm, ProjectForm
+from .forms import ProfileForm, ProjectForm,RatingsForm
 from django.contrib.auth.models import User
 from django.urls import reverse
-
 
 def index(request):
     projects = Project.objects.all()
@@ -15,8 +14,8 @@ def index(request):
 
 @login_required(login_url='/accounts/login/')
 def my_profile(request):
-    id=request.user.id 
-    profile = Profile.objects.get(id=id)
+    id=request.user.id
+    profile = Profile.objects.get(user_id=id)
     projects = Project.objects.filter(user__id=id)
     username = profile.user.username
     project_number = len(projects)
@@ -54,7 +53,7 @@ def submit_project(request):
         form = ProjectForm(request.POST, request.FILES)
         if form.is_valid():
             post = form.save(commit=False)
-            post.profile = current_user
+            post.user = current_user
             post.likes = 0
             post.save()
 
@@ -77,5 +76,42 @@ def search_results(request):
     else:
         message = "You haven't searched for any project"
         return render(request,'search.html',{"message":message})
+
+
+@login_required(login_url='/accounts/login/')
+def display_project(request, id):
+    project = Project.objects.get(id = id)
+    project_ratings = Rating.objects.filter(project__id=id)
+    design_ratings=[]
+    usability_ratings=[]
+    content_ratings=[]
+
+
+    if request.method == 'POST':
+        form = RatingsForm(request.POST)
+        if form.is_valid():
+            new_rating = form.save(commit=False)
+            new_rating.user = request.user
+            new_rating.project = project
+            avg = (new_rating.design+new_rating.content+new_rating.usability)/3
+            new_rating.average = round(avg, 2)
+            new_rating.save()
+            project_ratings = Rate.objects.filter(post=post)
+            for i in project_ratings:
+                design_ratings.append(i.design)
+                usability_ratings.append(i.usability)
+                content_ratings.append(i.content)
+
+            design_average = round((sum(design_ratings) / len(design_ratings)),2)      
+            usability_average = round((sum(usability_ratings) / len(usability_ratings)),2)
+            content_average = round((sum(content_ratings) / len(content_ratings)),2)
+
+            average = (design_average + usability_average + content_average) / 3
+            general_average = round(average, 2)
+           
+    else:
+        form = RatingsForm()
+
+    return render(request, "display_project.html", {"project":project,"project_ratings":project_ratings,"design_average":design_average, "usability_average":usability_average, "content_average": content_average,"general_average":general_average,"form":form,})
 
 

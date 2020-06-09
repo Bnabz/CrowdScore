@@ -11,15 +11,12 @@ class Profile(models.Model):
     bio =  models.TextField(blank=True)
     
     def __str__(self):
-        return f'{self.user.username}'
+        return self.user.username
 
-    def save_profile(self):
-        self.save()
+    @classmethod
+    def search_profile(cls, name):
+        return cls.objects.filter(user__username__icontains=name).all()
 
-    def delete_profile(self):
-        self.delete()
-
-    
     @receiver(post_save, sender = User)
     def create_profile(sender, instance,created, **kwargs):
         if created:
@@ -27,7 +24,7 @@ class Profile(models.Model):
 
     @receiver(post_save,sender = User)
     def save_profile( sender, instance, **kwargs):
-        instance.profile.save()    
+        instance.profile.save()  
 
 class Project(models.Model):
     title = models.CharField(max_length=50)
@@ -55,10 +52,10 @@ class Project(models.Model):
 class Rating(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    design = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)])
-    usability = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)], null=True)
-    content = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)])
-    average = models.DecimalField(decimal_places=2)
+    design = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)],default=0, blank=True)
+    usability = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)], default=0, blank=True)
+    content = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)],default=0, blank=True)
+    average = models.DecimalField(decimal_places=2,max_digits=3,default=0, blank=True)
 
     def save_rate(self):
         self.save()
@@ -66,5 +63,6 @@ class Rating(models.Model):
     def delete_rate(self):
         self.delete()
 
+  
 
 

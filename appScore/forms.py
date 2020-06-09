@@ -1,5 +1,5 @@
 from django import forms
-from .models import Project,Profile
+from .models import Project,Profile,Rating
 
 class ProfileForm(forms.ModelForm):
     class Meta:
@@ -14,6 +14,6 @@ class ProjectForm(forms.ModelForm):
 
 class RatingsForm(forms.ModelForm):
     class Meta:
-        model = Ratings
+        model = Rating
         fields = ['design', 'usability', 'content', ]
        
