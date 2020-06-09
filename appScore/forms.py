@@ -9,5 +9,5 @@ class ProfileForm(forms.ModelForm):
 class ProjectForm(forms.ModelForm):
     class Meta:
         model = Project
-        exclude = ['date_posted']
+        exclude = ['date_posted','user']
        
