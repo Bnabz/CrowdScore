@@ -25,7 +25,6 @@ def my_profile(request):
     username = profile.user.username
     project_number = len(projects)
     
-
     return render(request, 'my_profile.html',{"profile":profile,"projects":projects,"username":username,"project_number":project_number})
 
 @login_required(login_url='/accounts/login/')
@@ -37,8 +36,6 @@ def profile(request,id):
     username = profile.user.username
     project_number = len(projects)
     
-  
-
     return render(request, 'profile.html',{"profile":profile,"projects":projects,"user":user,"username":username,"project_number":project_number})
 
 @login_required(login_url='/accounts/login')

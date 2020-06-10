@@ -19,6 +19,7 @@ from django.contrib.auth import views
 from django.contrib.auth.views import LoginView, LogoutView
 from django_registration.backends.one_step.views import RegistrationView
 from django.urls import reverse_lazy
+from rest_framework.authtoken.views import obtain_auth_token
 
 
 urlpatterns = [
@@ -31,4 +32,4 @@ urlpatterns = [
     path('accounts/logout/', LogoutView.as_view(), name='logout'),
     path('api_token-auth/',obtain_auth_token),
 ]
-]
+
