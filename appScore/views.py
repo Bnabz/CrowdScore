@@ -5,6 +5,11 @@ from django.contrib.auth.decorators import login_required
 from .forms import ProfileForm, ProjectForm,RatingsForm
 from django.contrib.auth.models import User
 from django.urls import reverse
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from .serializer import ProfileSerializer,ProjectSerializer
+from  rest_framework.permissions import IsAuthenticated
+from rest_framework import status
 
 def index(request):
     projects = Project.objects.all()
@@ -131,5 +136,21 @@ def display_project(request, id):
         form = RatingsForm()
 
     return render(request, "display_project.html", {"project":project,"project_rating":project_rating,"form":form})
+
+
+class ProfileList(APIView):
+    permission_classes = (IsAuthenticated,)
+    def get(self,request,format = None):
+        all_profiles = Profile.objects.all()
+        serializers = ProfileSerializer(all_profiles,many = True)
+        return Response(serializers.data)
+
+
+class ProjectList(APIView):
+    permission_classes = (IsAuthenticated,)
+    def get(self,request, format = None):
+        all_projects = Project.get_all_projects()
+        serializers = ProjectSerializer(all_projects,many = True)
+        return Response(serializers.data)
 
 
